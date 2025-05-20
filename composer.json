@@ -1,11 +1,11 @@
 {
     "name": "coinpay/laravel-integration",
-    "description": "Laravel package for coin payment finance",
+    "description": "laravel-integration-package for https://coinpay.finance/en",
     "license": "MIT",
     "authors": [
         {
             "name": "CoinPay",
-            "email": "samholding@coinpay.finance"
+            "email": "support@coinpay.finance"
         }
     ],
     "autoload": {
