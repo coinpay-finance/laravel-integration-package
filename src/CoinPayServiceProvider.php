@@ -1,0 +1,27 @@
+<?php
+
+namespace Coinpay\Finance;
+
+use Coinpay\Finance\services\CoinPay\CoinPayGateway;
+use Coinpay\Finance\services\CoinPay\CoinPayGatewayInterface;
+use Illuminate\Support\ServiceProvider;
+
+class CoinPayServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        $this->app->bind(CoinPayGatewayInterface::class, function ($app) {
+            return new CoinPayGateway();
+        });
+        $this->mergeConfigFrom(
+            __DIR__.'/config/coinpay.php', 'coinpay'
+        );
+    }
+
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__.'/config/coinpay.php' => config_path('coinpay.php'),
+        ], 'coinpay-config');
+    }
+}

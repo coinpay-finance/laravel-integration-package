@@ -1,0 +1,27 @@
+{
+    "name": "coinpay/laravel-integration",
+    "description": "Laravel package for coin payment finance",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CoinPay",
+            "email": "samholding@coinpay.finance"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Coinpay\\Finance\\": "src/"
+        }
+    },
+    "require": {
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Coinpay\\Finance\\CoinPayServiceProvider"
+            ]
+        }
+    }
+}
