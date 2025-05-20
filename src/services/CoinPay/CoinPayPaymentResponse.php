@@ -2,7 +2,7 @@
 
 namespace Coinpay\Finance\services\CoinPay;
 
-class PaymentResponse
+class CoinPayPaymentResponse
 {
     public $url = "";
     public $transactionId = null;

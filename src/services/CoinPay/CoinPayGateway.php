@@ -20,7 +20,7 @@ class CoinPayGateway implements CoinPayGatewayInterface
         ]);
     }
 
-    public function request(int $amount, string $callbackUrl, string $client_ref_id, string $payer_identity = null , string $name = null , string $description = null , string $national_code = null): PaymentResponse
+    public function request(int $amount, string $callbackUrl, string $client_ref_id, string $payer_identity = null , string $name = null , string $description = null , string $national_code = null): CoinPayPaymentResponse
     {
         try {
             $data = [
@@ -38,7 +38,7 @@ class CoinPayGateway implements CoinPayGatewayInterface
             $responseBody = json_decode($response->getBody(), true);
 
             if ($response->getStatusCode() == 200 && is_array($responseBody) && !empty($responseBody['status']) && !empty($responseBody['url'])) {
-                return new PaymentResponse($responseBody['url'], $responseBody['transaction_id'] ?? 0);
+                return new CoinPayPaymentResponse($responseBody['url'], $responseBody['transaction_id'] ?? 0);
             }
 
             throw new \Exception($responseBody['message'] ?? 'Payment request failed', $response->getStatusCode());
