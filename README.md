@@ -1,6 +1,6 @@
-# Coinpay
+# CoinPay
 
-Safe, fast and instant payments; Anytime, anywhere with CoinPay
+Safe, fast and instant payments; Anytime, anywhere with CoinPay.
 
 ## Installation
 
@@ -11,34 +11,95 @@ composer require coinpay/laravel-integration
 ```
 
 Publish Vendor Files:
+
 ```bash
 php artisan vendor:publish --tag=coinpay-config
 ```
 
-### Configuration
-In config/coinpay.php file you can change your api_key:
+## Configuration
 
-``
-'api_key' => env('COINPAY_API_KEY'),
-``
+After publishing, a configuration file `config/coinpay.php` will be available. You can set your API key and webhook route:
+
+```php
+return [
+    'api_key' => env('COINPAY_API_KEY'),          // Your CoinPay API key
+    'webhook_route' => '/coinpay/webhook',       // The route for receiving webhook callbacks
+    'redirect_url' => env('COINPAY_REDIRECT_URL', 'https://your-website.com/callback'), // Redirect URL after payment
+];
+```
+
+Add these to your `.env` file:
+
+```
+COINPAY_API_KEY=your_api_key_here
+COINPAY_REDIRECT_URL=https://your-website.com/callback
+```
 
 ## Usage
+
+### Creating a Payment
+
 ```php
-try {
-    $coinPayGateway = CoinPay::request(
-        1,                                              // The amount to be paid (in Dollar).
-        'https://your-callback.url',                    // The URL the user will be redirected to after payment.
-        'ref123456',                                    // A unique reference ID for tracking the transaction.
-        'payer@example.com',                            // The identity of the payer (email or phone number).
-        'Alimo',                                        // Full name of the payer.
-        'Test Payment',                                 // Description of the payment (e.g. "Payment for order #123").
-        '1234567890'                                    // National identification code of the payer.
-    );
-    $url = $coinPayGateway->url;
-    //$transactionId = $coinPayGateway->transactionId;  //Store this Id if you need
+use Coinpay\Finance\Services\CoinPayPaymentRequest;
+use Coinpay\Finance\Services\CoinPayGateway;
 
-    return response("<a style='word-break: break-all' href=$url > $url </a>");
+$paymentRequest = new CoinPayPaymentRequest(
+    amount: 100000,                     // Amount in smallest currency unit
+    clientRefId: 'INV12345',            // Unique reference ID
+    payerIdentity: 'user@example.com',  // Payer identity (email/phone)
+    name: 'John Doe',                   // Payer name
+    description: 'Invoice Payment',     // Payment description
+    nationalCode: '1234567890'          // National code of payer
+);
 
-}catch (\Exception $exception){
-    return $exception->getMessage();
+$coinPayGateway = new CoinPayGateway();
+$response = $coinPayGateway->createPayment($paymentRequest);
+
+$url = $response->url;
+// Optionally store $response->transactionId in your database
+```
+
+### Handling Webhook
+
+Extend `WebhookService` to handle webhook callbacks:
+
+```php
+namespace App\Services;
+
+use Coinpay\Finance\Services\WebhookService;
+use App\Models\Payment;
+
+class MyCustomWebhookService extends WebhookService
+{
+    public function handleWebhook(string $gateway, array $payload): array
+    {
+        // Save payment data to database
+        Payment::create([
+            'transaction_id' => $payload['transaction_id'],
+            'amount' => $payload['amount'],
+            'status' => $payload['status'],
+        ]);
+
+        return [
+            'is_success' => true,
+            'message' => 'Stored successfully',
+        ];
+    }
 }
+```
+
+### Routing Webhook
+
+```php
+use Illuminate\Support\Facades\Route;
+use Coinpay\Finance\Http\Controllers\WebhookController;
+
+Route::post(config('coinpay.webhook_route'), [WebhookController::class, 'handle'])->name('coinpay.webhook');
+```
+
+This ensures that if the route is changed in the config, the webhook will still work.
+
+## Notes
+
+* Always use `route('coinpay.webhook')` for the webhook callback URL to respect any custom route defined by the user.
+* The `redirect_url` is fetched from the config, so you can change it per environment without editing code.
