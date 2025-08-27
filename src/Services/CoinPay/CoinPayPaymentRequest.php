@@ -1,6 +1,6 @@
 <?php
 
-namespace Coinpay\Finance\services\CoinPay;
+namespace Coinpay\Finance\Services\CoinPay;
 
 /**
  * Data Transfer Object (DTO) for creating a CoinPay payment request.

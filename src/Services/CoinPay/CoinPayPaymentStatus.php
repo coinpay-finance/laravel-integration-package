@@ -1,6 +1,6 @@
 <?php
 
-namespace Coinpay\Finance\services\CoinPay;
+namespace Coinpay\Finance\Services\CoinPay;
 
 class CoinPayPaymentStatus
 {

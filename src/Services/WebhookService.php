@@ -1,6 +1,6 @@
 <?php
 
-namespace Coinpay\Finance\services;
+namespace Coinpay\Finance\Services;
 
 abstract class WebhookService
 {

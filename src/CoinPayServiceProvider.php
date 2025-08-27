@@ -2,8 +2,8 @@
 
 namespace Coinpay\Finance;
 
-use Coinpay\Finance\services\CoinPay\CoinPayGateway;
-use Coinpay\Finance\services\CoinPay\CoinPayGatewayInterface;
+use Coinpay\Finance\Services\CoinPay\CoinPayGateway;
+use Coinpay\Finance\Services\CoinPay\CoinPayGatewayInterface;
 use Illuminate\Support\ServiceProvider;
 
 class CoinPayServiceProvider extends ServiceProvider

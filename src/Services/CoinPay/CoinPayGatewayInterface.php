@@ -1,6 +1,6 @@
 <?php
 
-namespace Coinpay\Finance\services\CoinPay;
+namespace Coinpay\Finance\Services\CoinPay;
 
 use Exception;
 
@@ -22,6 +22,7 @@ interface CoinPayGatewayInterface
      * @throws \Exception             If the request fails or the API responds with an error message.
      */
     public function createPayment(CoinPayPaymentRequest $paymentRequest): CoinPayPaymentResponse;
+
     /**
      * Check the status of a CoinPay transaction.
      *

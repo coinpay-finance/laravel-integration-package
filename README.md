@@ -41,7 +41,8 @@ COINPAY_REDIRECT_URL=https://your-website.com/callback
 
 ```php
 use Coinpay\Finance\Services\CoinPayPaymentRequest;
-use Coinpay\Finance\Services\CoinPayGateway;
+use Coinpay\Finance\Facades\CoinPay;
+
 
 $paymentRequest = new CoinPayPaymentRequest(
     amount: 100000,                     // Amount in smallest currency unit
@@ -52,8 +53,7 @@ $paymentRequest = new CoinPayPaymentRequest(
     nationalCode: '1234567890'          // National code of payer
 );
 
-$coinPayGateway = new CoinPayGateway();
-$response = $coinPayGateway->createPayment($paymentRequest);
+$response = CoinPay::createPayment($paymentRequest);
 
 $url = $response->url;
 // Optionally store $response->transactionId in your database
