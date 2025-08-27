@@ -88,17 +88,6 @@ class MyCustomWebhookService extends WebhookService
 }
 ```
 
-### Routing Webhook
-
-```php
-use Illuminate\Support\Facades\Route;
-use Coinpay\Finance\Http\Controllers\WebhookController;
-
-Route::post(config('coinpay.webhook_route'), [WebhookController::class, 'handle'])->name('coinpay.webhook');
-```
-
-This ensures that if the route is changed in the config, the webhook will still work.
-
 ## Notes
 
 * Always use `route('coinpay.webhook')` for the webhook callback URL to respect any custom route defined by the user.
