@@ -11,25 +11,28 @@ namespace Coinpay\Finance\services\CoinPay;
 class CoinPayPaymentRequest
 {
     /**
-     * @param int         $amount         Amount to be paid (in smallest currency unit, e.g. cents).
-     * @param string      $redirectUrl    URL where the user will be redirected after payment.
-     * @param string      $webhookCallback URL to receive asynchronous payment status updates (webhook).
-     * @param string      $clientRefId    Unique reference ID from the client system (order/invoice ID).
-     * @param string|null $payerIdentity  Identifier of the payer (e.g. email, phone number).
-     * @param string|null $name           Payer's name.
-     * @param string|null $description    Payment description (e.g. invoice description).
-     * @param string|null $nationalCode   Payer's national code (if required).
+     * @param int $amount Amount to be paid (in smallest currency unit, e.g. cents).
+     * @param string $clientRefId Unique reference ID from the client system (order/invoice ID).
+     * @param string|null $payerIdentity Identifier of the payer (e.g. email, phone number).
+     * @param string|null $name Payer's name.
+     * @param string|null $description Payment description (e.g. invoice description).
+     * @param string|null $nationalCode Payer's national code (if required).
+     * @param string|null $redirectUrl URL where the user will be redirected after payment.
+     * @param string|null $webhookCallback URL to receive asynchronous payment status updates (webhook).
      */
     public function __construct(
-        public int $amount,
-        public string $redirectUrl,
-        public string $webhookCallback,
-        public string $clientRefId,
+        public int     $amount,
+        public string  $clientRefId,
         public ?string $payerIdentity = null,
         public ?string $name = null,
         public ?string $description = null,
         public ?string $nationalCode = null,
-    ) {}
+        public ?string  $redirectUrl = null,
+        public ?string $webhookCallback = null,
+    ) {
+        $this->webhookCallback = $this->webhookCallback ?? route('coinpay.webhook');
+        $this->redirectUrl = $redirectUrl ?? config('coinpay.redirect_url');
+    }
 
     /**
      * Convert the payment request object into an array
