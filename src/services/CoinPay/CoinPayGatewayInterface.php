@@ -7,22 +7,21 @@ use Exception;
 interface CoinPayGatewayInterface
 {
     /**
-     * Send a payment request to CoinPay API.
+     * Create a new payment session with the CoinPay API.
      *
-     * @param int $amount The amount to be paid (in Dollar - $).
-     * @param string $callbackUrl The URL the user will be redirected to after payment.
-     * @param string $client_ref_id A unique reference ID for tracking the transaction.
-     * @param string|null $payer_identity The identity of the payer (email or phone number).
-     * @param string|null $name Full name of the payer.
-     * @param string|null $description Description of the payment (e.g. "Payment for order #123").
-     * @param string|null $national_code National identification code of the payer.
+     * This method sends a request to the CoinPay platform in order to create
+     * a new payment. It uses the provided DTO, converts it to an array, and
+     * performs an HTTP POST request. If successful, it returns a response
+     * object containing the payment URL and transaction ID.
      *
-     * @return CoinPayPaymentResponse The response from the CoinPay API, including a payment URL.
+     * @param  CoinPayPaymentRequest $paymentRequest  Data Transfer Object containing all required
+     *                                                and optional parameters for initiating the payment.
      *
-     * @throws Exception If the request fails or the API returns an error.
+     * @return CoinPayPaymentResponse Returns a response object containing the payment URL and transaction ID.
+     *
+     * @throws \Exception             If the request fails or the API responds with an error message.
      */
-    public function request(int $amount, string $callbackUrl, string $client_ref_id, string $payer_identity = null, string $name = null, string $description = null , string $national_code = null) : CoinPayPaymentResponse;
-
+    public function createPayment(CoinPayPaymentRequest $paymentRequest): CoinPayPaymentResponse;
     /**
      * Check the status of a CoinPay transaction.
      *
