@@ -5,18 +5,55 @@ namespace Coinpay\Finance\Services\CoinPay;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
+/**
+ * Class CoinPayGateway
+ *
+ * This service provides integration with the CoinPay API for
+ * creating new cryptocurrency payment requests and checking
+ * the status of existing transactions.
+ *
+ * Responsibilities:
+ * - Initialize the HTTP client with authentication headers
+ * - Send requests to the CoinPay API endpoints
+ * - Handle responses and exceptions
+ *
+ * @package Coinpay\Finance\Services\CoinPay
+ */
 class CoinPayGateway implements CoinPayGatewayInterface
 {
-    protected static $PREFIX = 'https://platform.coinpay.finance/api/v1/coin-pay';
 
-    protected $client;
+
+    /**
+     * The base URL of the CoinPay API.
+     *
+     * @var string
+     */
+    protected string $baseUrl;
+
+    /**
+     * The Guzzle HTTP client instance.
+     *
+     * @var \GuzzleHttp\Client
+     */
+    protected Client $client;
+
+    /**
+     * Create a new CoinPayGateway instance.
+     *
+     * Initializes the base API URL and configures the Guzzle client
+     * with default headers for authentication and JSON handling.
+     *
+     * @return void
+     */
     public function __construct()
     {
+        $this->baseUrl = config('coinpay.base_url');
+
         $this->client = new Client([
             'headers' => [
                 'Authorization' => config('coinpay.api_key'),
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
             ],
         ]);
     }
@@ -27,7 +64,7 @@ class CoinPayGateway implements CoinPayGatewayInterface
     public function createPayment(CoinPayPaymentRequest $paymentRequest): CoinPayPaymentResponse
     {
         try {
-            $response = $this->client->post(self::$PREFIX . '/payment', [
+            $response = $this->client->post($this->baseUrl . '/payment', [
                 'json' => $paymentRequest->toArray()
             ]);
 

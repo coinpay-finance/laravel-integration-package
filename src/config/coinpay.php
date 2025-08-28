@@ -24,6 +24,20 @@ return [
     'api_key' => env('COINPAY_API_KEY', ''),
 
     /**
+     * CoinPay Base URL.
+     *
+     * This is the base API endpoint for CoinPay requests.
+     * You can override it in your `.env` file as `COINPAY_BASE_URL`.
+     *
+     * Example (production): 'https://platform.coinpay.finance/api/v1/coin-pay'
+     * Example (staging):    'https://staging.coinpay.finance/api/v1/coin-pay'
+     *
+     * @var string
+     */
+    'base_url' => env('COINPAY_BASE_URL', 'https://platform.coinpay.finance/api/v1/coin-pay'),
+
+
+    /**
      * Webhook Route.
      *
      * This is the URI path where CoinPay will send asynchronous payment
