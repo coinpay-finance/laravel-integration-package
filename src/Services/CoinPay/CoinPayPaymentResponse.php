@@ -9,6 +9,6 @@ class CoinPayPaymentResponse
      * @param string $transactionId
      * @param bool $status
      */
-    public function __construct(protected string $url, protected string $transactionId, protected bool $status) {
+    public function __construct(public string $url, public string $transactionId, public bool $status) {
     }
 }
