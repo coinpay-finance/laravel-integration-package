@@ -78,7 +78,8 @@ class CoinPayGateway implements CoinPayGatewayInterface
             ) {
                 return new CoinPayPaymentResponse(
                     $responseBody['url'],
-                    $responseBody['transaction_id']
+                    $responseBody['transaction_id'],
+                    $responseBody['status']
                 );
             }
 

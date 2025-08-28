@@ -2,12 +2,14 @@
 
 namespace Coinpay\Finance\Http\Controllers;
 
+use Coinpay\Finance\Enums\TypeGatewaysEnum;
 use Coinpay\Finance\Http\Requests\WebhookRequest;
 use Coinpay\Finance\Services\WebhookService;
 use Illuminate\Http\JsonResponse;
 
 class WebhookController
 {
+
     /**
      * WebhookController constructor.
      *
@@ -35,7 +37,7 @@ class WebhookController
         ]);
 
         // Process webhook via the service
-        $result = $this->webhookService->handleWebhook('coinpay', $validate);
+        $result = $this->webhookService->handleWebhook(TypeGatewaysEnum::COINPAY->value, $validate);
 
         // If handling failed, return error response
         if (! $result['is_success']) {

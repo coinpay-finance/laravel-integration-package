@@ -4,11 +4,11 @@ namespace Coinpay\Finance\Services\CoinPay;
 
 class CoinPayPaymentResponse
 {
-    public $url = "";
-    public $transactionId = null;
-
-    public function __construct(string $url, string $transactionId) {
-        $this->url = $url;
-        $this->transactionId = $transactionId;
+    /**
+     * @param string $url
+     * @param string $transactionId
+     * @param bool $status
+     */
+    public function __construct(protected string $url, protected string $transactionId, protected bool $status) {
     }
 }
