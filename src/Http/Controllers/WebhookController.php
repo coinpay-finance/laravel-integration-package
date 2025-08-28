@@ -4,7 +4,7 @@ namespace Coinpay\Finance\Http\Controllers;
 
 use Coinpay\Finance\Enums\TypeGatewaysEnum;
 use Coinpay\Finance\Http\Requests\WebhookRequest;
-use Coinpay\Finance\Services\WebhookService;
+use Coinpay\Finance\Services\CoinPay\Webhook\WebhookService;
 use Illuminate\Http\JsonResponse;
 
 class WebhookController

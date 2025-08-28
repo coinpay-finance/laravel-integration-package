@@ -66,8 +66,7 @@ Extend `WebhookService` to handle webhook callbacks:
 ```php
 namespace App\Services;
 
-use Coinpay\Finance\Services\WebhookService;
-use App\Models\Payment;
+use App\Models\Payment;use Coinpay\Finance\Services\CoinPay\Webhook\WebhookService;
 
 class MyCustomWebhookService extends WebhookService
 {
