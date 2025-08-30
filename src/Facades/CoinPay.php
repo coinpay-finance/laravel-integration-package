@@ -24,6 +24,6 @@ class CoinPay extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return CoinPayGatewayInterface::class;
+        return 'coinpay.gateway';
     }
 }

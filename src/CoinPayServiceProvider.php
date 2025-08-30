@@ -5,6 +5,7 @@ namespace Coinpay\Finance;
 use Coinpay\Finance\Services\CoinPay\CoinPayGateway;
 use Coinpay\Finance\Services\CoinPay\CoinPayGatewayInterface;
 use Illuminate\Support\ServiceProvider;
+use Modules\Core\Services\ReferralService;
 
 class CoinPayServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,11 @@ class CoinPayServiceProvider extends ServiceProvider
         $this->app->bind(CoinPayGatewayInterface::class, function ($app) {
             return new CoinPayGateway();
         });
+
+        $this->app->singleton('coinpay.gateway', function ($app) {
+            return $app->make(CoinPayGatewayInterface::class);
+        });
+
         $this->mergeConfigFrom(
             __DIR__.'/config/coinpay.php', 'coinpay'
         );
