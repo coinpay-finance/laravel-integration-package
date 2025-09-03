@@ -45,7 +45,7 @@ class WebhookController
                 'is_success' => false,
                 'message' => $result['message'] ?? null,
                 'transaction_id' => $validate['transaction_id'],
-            ], 422);
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // Return success response

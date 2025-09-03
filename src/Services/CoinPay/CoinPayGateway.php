@@ -83,20 +83,31 @@ class CoinPayGateway implements CoinPayGatewayInterface
                 );
             }
 
-            throw new \Exception(
-                $responseBody['message'] ?? 'Payment request failed',
-                $response->getStatusCode()
-            );
+            return response()->json([
+                'is_success' => false,
+                'message' => $responseBody['message'] ?? 'Payment request failed',
+                'code' => $response->getStatusCode(),
+            ], $response->getStatusCode());
 
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $resp = $e->getResponse();
                 $msg = (string) $resp->getBody();
                 $code = $resp->getStatusCode();
-                throw new \Exception("Guzzle Request failed: {$msg}", $code);
+
+                return response()->json([
+                    'is_success' => false,
+                    'message' => "Request failed: {$msg}", $code,
+                    'code' => $code,
+                ], $code);
+
             }
 
-            throw new \Exception("Guzzle Request failed: " . $e->getMessage());
+            return response()->json([
+                'is_success' => false,
+                'message' => "Request failed",
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+            ],Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
