@@ -2,7 +2,7 @@
 
 namespace Coinpay\Finance\Services\CoinPay\Webhook;
 
-abstract class WebhookService
+class WebhookService
 {
     /**
      * Handle a payment gateway webhook.
