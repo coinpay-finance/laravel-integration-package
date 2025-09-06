@@ -4,6 +4,8 @@ namespace Coinpay\Finance;
 
 use Coinpay\Finance\Services\CoinPay\CoinPayGateway;
 use Coinpay\Finance\Services\CoinPay\CoinPayGatewayInterface;
+use Coinpay\Finance\Services\CoinPay\Webhook\WebhookService;
+use Coinpay\Finance\Services\CoinPay\Webhook\WebhookServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use Modules\Core\Services\ReferralService;
 
@@ -17,6 +19,10 @@ class CoinPayServiceProvider extends ServiceProvider
 
         $this->app->singleton('coinpay.gateway', function ($app) {
             return $app->make(CoinPayGatewayInterface::class);
+        });
+
+        $this->app->bind(WebhookServiceInterface::class, function ($app) {
+            return $app->make(config('coinpay.webhook_service', WebhookService::class));
         });
 
         $this->mergeConfigFrom(

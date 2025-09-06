@@ -51,6 +51,20 @@ return [
     'webhook_route' => env('COINPAY_WEBHOOK_ROUTE', '/coinpay/webhook'),
 
     /**
+     * Webhook Service.
+     *
+     * This class is responsible for handling webhook callbacks from CoinPay.
+     * By default, it uses the base WebhookService provided by the package.
+     *
+     * You can override this by binding your own implementation or by changing
+     * this config value to point to a custom class (e.g., in your Payments module).
+     *
+     * Example: \Modules\Payments\Services\PaymentWebhookService::class
+     *
+     */
+    'webhook_service' => \Coinpay\Finance\Services\CoinPay\Webhook\WebhookService::class,
+
+    /**
      * Redirect URL.
      *
      * This is the URL where the user will be redirected after completing

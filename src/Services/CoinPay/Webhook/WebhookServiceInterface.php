@@ -2,7 +2,7 @@
 
 namespace Coinpay\Finance\Services\CoinPay\Webhook;
 
-class WebhookService implements WebhookServiceInterface
+interface WebhookServiceInterface
 {
     /**
      * Handle a payment gateway webhook.
@@ -19,13 +19,5 @@ class WebhookService implements WebhookServiceInterface
      *     message: string
      * }
      */
-    public function handleWebhook(string $gateway, array $payload): array
-    {
-
-        // Currently, just return a success response
-        return [
-            'is_success' => true,
-            'message' => 'Webhook handled successfully',
-        ];
-    }
+    public function handleWebhook(string $gateway, array $payload): array;
 }

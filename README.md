@@ -22,8 +22,57 @@ After publishing, a configuration file `config/coinpay.php` will be available. Y
 
 ```php
 return [
+     /**
+     * Your CoinPay API Key.
+     *
+     * You should set this value in your `.env` file as `COINPAY_API_KEY`.
+     *
+     * @var string
+     */
     'api_key' => env('COINPAY_API_KEY'),          // Your CoinPay API key
+	
+	 /**
+     * Webhook Route.
+     *
+     * This is the URI path where CoinPay will send asynchronous payment
+     * notifications (webhooks). You can customize it in your `.env` file
+     * as `COINPAY_WEBHOOK_ROUTE`.
+     *
+     * Example: '/coinpay/webhook'
+     *
+     * @var string
+     */
     'webhook_route' => '/coinpay/webhook',       // The route for receiving webhook callbacks
+	
+	    /**
+     * Webhook Service.
+     *
+     * This must implement the `WebhookServiceInterface`. By default, the package
+     * provides a basic implementation. You can override it by binding your own
+     * class in a ServiceProvider.
+     *
+     * Example:
+     * $this->app->bind(
+     *     \Coinpay\Finance\Services\CoinPay\Webhook\WebhookServiceInterface::class,
+     *     \App\Services\MyCustomWebhookService::class
+     * );
+     *
+     * @var class-string<\Coinpay\Finance\Services\CoinPay\Webhook\WebhookServiceInterface>
+     */
+    'webhook_service' => \Coinpay\Finance\Services\CoinPay\Webhook\WebhookService::class,
+	
+	/**
+     * Redirect URL.
+     *
+     * This is the URL where the user will be redirected after completing
+     * the payment process on the CoinPay gateway.
+     *
+     * You should set this value in your `.env` file as `COINPAY_REDIRECT_URL`.
+     *
+     * Example: 'https://your-app.com/payment/callback'
+     *
+     * @var string
+     */
     'redirect_url' => env('COINPAY_REDIRECT_URL', 'https://your-website.com/callback'), // Redirect URL after payment
 ];
 ```
@@ -66,9 +115,10 @@ Extend `WebhookService` to handle webhook callbacks:
 ```php
 namespace App\Services;
 
-use App\Models\Payment;use Coinpay\Finance\Services\CoinPay\Webhook\WebhookService;
+use App\Models\Payment;
+use Coinpay\Finance\Services\CoinPay\Webhook\WebhookServiceInterface;
 
-class MyCustomWebhookService extends WebhookService
+class MyCustomWebhookService implements WebhookServiceInterface
 {
     public function handleWebhook(string $gateway, array $payload): array
     {

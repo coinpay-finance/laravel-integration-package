@@ -5,6 +5,7 @@ namespace Coinpay\Finance\Http\Controllers;
 use Coinpay\Finance\Enums\TypeGatewaysEnum;
 use Coinpay\Finance\Http\Requests\WebhookRequest;
 use Coinpay\Finance\Services\CoinPay\Webhook\WebhookService;
+use Coinpay\Finance\Services\CoinPay\Webhook\WebhookServiceInterface;
 use Illuminate\Http\JsonResponse;
 
 class WebhookController
@@ -16,7 +17,7 @@ class WebhookController
      * @param WebhookService $webhookService
      */
     public function __construct(
-        protected WebhookService $webhookService
+        protected WebhookServiceInterface $webhookService
     ) {}
 
     /**
