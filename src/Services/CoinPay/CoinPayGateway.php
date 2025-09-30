@@ -2,8 +2,8 @@
 
 namespace Coinpay\Finance\Services\CoinPay;
 
+use Coinpay\Finance\Exceptions\CoinPayException;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * Class CoinPayGateway
@@ -33,7 +33,7 @@ class CoinPayGateway implements CoinPayGatewayInterface
     /**
      * The Guzzle HTTP client instance.
      *
-     * @var \GuzzleHttp\Client
+     * @var Client
      */
     protected Client $client;
 
@@ -52,92 +52,53 @@ class CoinPayGateway implements CoinPayGatewayInterface
         $this->client = new Client([
             'headers' => [
                 'Authorization' => config('coinpay.api_key'),
-                'Content-Type'  => 'application/json',
-                'Accept'        => 'application/json',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ],
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /* @inheritdoc */
     public function createPayment(CoinPayPaymentRequest $paymentRequest): CoinPayPaymentResponse
     {
-        try {
-            $response = $this->client->post($this->baseUrl . '/payment', [
-                'json' => $paymentRequest->toArray()
-            ]);
+        $response = $this->client->post($this->baseUrl . '/payment', [
+            'json' => $paymentRequest->toArray()
+        ]);
 
-            $responseBody = json_decode($response->getBody(), true);
+        $responseBody = json_decode($response->getBody(), true);
 
-            if (
-                $response->getStatusCode() == 200
-                && is_array($responseBody)
-                && !empty($responseBody['status'])
-                && !empty($responseBody['url'])
-            ) {
-                return new CoinPayPaymentResponse(
-                    $responseBody['url'],
-                    $responseBody['transaction_id'],
-                    $responseBody['status']
-                );
-            }
-
-            return response()->json([
-                'is_success' => false,
-                'message' => $responseBody['message'] ?? 'Payment request failed',
-                'code' => $response->getStatusCode(),
-            ], $response->getStatusCode());
-
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $resp = $e->getResponse();
-                $msg = (string) $resp->getBody();
-                $code = $resp->getStatusCode();
-
-                return response()->json([
-                    'is_success' => false,
-                    'message' => "Request failed: {$msg}", $code,
-                    'code' => $code,
-                ], $code);
-
-            }
-
-            return response()->json([
-                'is_success' => false,
-                'message' => "Request failed",
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-            ],Response::HTTP_INTERNAL_SERVER_ERROR);
+        if (
+            $response->getStatusCode() == 200
+            && is_array($responseBody)
+            && !empty($responseBody['status'])
+            && !empty($responseBody['url'])
+        ) {
+            return new CoinPayPaymentResponse(
+                $responseBody['url'],
+                $responseBody['transaction_id'],
+                $responseBody['status']
+            );
         }
+
+        throw new CoinPayException([
+            'is_success' => false,
+            'message' => $responseBody['message'] ?? 'Payment request failed',
+            'code' => $response->getStatusCode(),
+        ], $response->getStatusCode());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /* @inheritdoc */
     public function checkStatus(string $transaction_id): CoinPayPaymentStatus
     {
-        try {
 
-            $response = $this->client->get(self::$PREFIX , ['query' => ['transaction_id' => $transaction_id]]);
+        $response = $this->client->get($this->baseUrl, ['query' => ['transaction_id' => $transaction_id]]);
 
-            $responseBody = json_decode($response->getBody(), true);
+        $responseBody = json_decode($response->getBody(), true);
 
-            if ($response->getStatusCode() == 200 && is_array($responseBody) && !empty($responseBody['status']) && !empty($responseBody['amount']) && !empty($responseBody['transaction_id'])) {
-                return new CoinPayPaymentStatus($responseBody['status'], $responseBody['amount'], $responseBody['transaction_id'], $responseBody['reason'], $responseBody['transaction_hash'], $responseBody['network']);
-            }
-
-            throw new \Exception($responseBody['message'] ?? 'Check payment status failed', $response->getStatusCode());
-
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $resp = $e->getResponse();
-                $msg = (string) $resp->getBody();
-                $code = $resp->getStatusCode();
-                throw new \Exception("Guzzle Request failed: {$msg}", $code);
-            } else {
-                throw new \Exception("Guzzle Request failed: " . $e->getMessage());
-            }
+        if ($response->getStatusCode() == 200 && is_array($responseBody) && !empty($responseBody['status']) && !empty($responseBody['amount']) && !empty($responseBody['transaction_id'])) {
+            return new CoinPayPaymentStatus($responseBody['status'], $responseBody['amount'], $responseBody['transaction_id'], $responseBody['reason'], $responseBody['transaction_hash'], $responseBody['network']);
         }
-    }
 
+        throw new CoinPayException($responseBody['message'] ?? 'Check payment status failed', $response->getStatusCode());
+    }
 }

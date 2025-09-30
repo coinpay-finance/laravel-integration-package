@@ -11,7 +11,7 @@ namespace Coinpay\Finance\Services\CoinPay;
 class CoinPayPaymentRequest
 {
     /**
-     * @param int $amount Amount to be paid (in smallest currency unit, e.g. cents).
+     * @param float $amount Amount to be paid (in smallest currency unit, e.g. cents).
      * @param string $clientRefId Unique reference ID from the client system (order/invoice ID).
      * @param string|null $payerIdentity Identifier of the payer (e.g. email, phone number).
      * @param string|null $name Payer's name.
@@ -21,7 +21,7 @@ class CoinPayPaymentRequest
      * @param string|null $webhookCallback URL to receive asynchronous payment status updates (webhook).
      */
     public function __construct(
-        public int     $amount,
+        public float     $amount,
         public string  $clientRefId,
         public ?string $payerIdentity = null,
         public ?string $name = null,

@@ -2,7 +2,8 @@
 
 namespace Coinpay\Finance\Services\CoinPay;
 
-use Exception;
+use Coinpay\Finance\Exceptions\CoinPayException;
+use GuzzleHttp\Exception\GuzzleException;
 
 interface CoinPayGatewayInterface
 {
@@ -19,7 +20,8 @@ interface CoinPayGatewayInterface
      *
      * @return CoinPayPaymentResponse Returns a response object containing the payment URL and transaction ID.
      *
-     * @throws \Exception             If the request fails or the API responds with an error message.
+     * @throws GuzzleException
+     * @throws CoinPayException
      */
     public function createPayment(CoinPayPaymentRequest $paymentRequest): CoinPayPaymentResponse;
 
@@ -32,7 +34,9 @@ interface CoinPayGatewayInterface
      *
      * @param string $transaction_id The transaction ID to check.
      * @return CoinPayPaymentStatus Returns the status, amount, transaction ID, reason, hash, and network.
-     * @throws Exception If the request fails or the response is invalid.
+     *
+     * @throws GuzzleException
+     * @throws CoinPayException
      */
     public function checkStatus(string $transaction_id): CoinPayPaymentStatus;
 }

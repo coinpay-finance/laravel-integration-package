@@ -7,7 +7,6 @@ use Coinpay\Finance\Services\CoinPay\CoinPayGatewayInterface;
 use Coinpay\Finance\Services\CoinPay\Webhook\WebhookService;
 use Coinpay\Finance\Services\CoinPay\Webhook\WebhookServiceInterface;
 use Illuminate\Support\ServiceProvider;
-use Modules\Core\Services\ReferralService;
 
 class CoinPayServiceProvider extends ServiceProvider
 {
