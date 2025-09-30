@@ -19,6 +19,11 @@ class WebhookRequest extends FormRequest
 
     public function authorize(): bool
     {
+        $secret = $this->header('SECRET');
+        if ($secret !== config('coinpay.webhook_secret')) {
+            return false;
+        }
+
         return true;
     }
 }

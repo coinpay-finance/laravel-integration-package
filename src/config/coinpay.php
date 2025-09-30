@@ -18,8 +18,6 @@ return [
      * Your CoinPay API Key.
      *
      * You should set this value in your `.env` file as `COINPAY_API_KEY`.
-     *
-     * @var string
      */
     'api_key' => env('COINPAY_API_KEY', ''),
 
@@ -30,9 +28,7 @@ return [
      * You can override it in your `.env` file as `COINPAY_BASE_URL`.
      *
      * Example (production): 'https://platform.coinpay.finance/api/v1/coin-pay'
-     * Example (staging):    'https://staging.coinpay.finance/api/v1/coin-pay'
-     *
-     * @var string
+     * Example (staging): 'https://staging.coinpay.finance/api/v1/coin-pay'
      */
     'base_url' => env('COINPAY_BASE_URL', 'https://platform.coinpay.finance/api/v1/coin-pay'),
 
@@ -45,8 +41,6 @@ return [
      * as `COINPAY_WEBHOOK_ROUTE`.
      *
      * Example: '/coinpay/webhook'
-     *
-     * @var string
      */
     'webhook_route' => env('COINPAY_WEBHOOK_ROUTE', '/coinpay/webhook'),
 
@@ -65,6 +59,15 @@ return [
     'webhook_service' => \Coinpay\Finance\Services\CoinPay\Webhook\WebhookService::class,
 
     /**
+     * Webhook Secret.
+     *
+     * A secret key used to verify the authenticity of incoming webhook requests.
+     * You should set this value in your `.env` file as `COINPAY_WEBHOOK_SECRET`.
+     * CoinPay will include this secret in the request headers for verification.
+     */
+    'webhook_secret' => env('COINPAY_WEBHOOK_SECRET', ''),
+
+    /**
      * Redirect URL.
      *
      * This is the URL where the user will be redirected after completing
@@ -73,8 +76,6 @@ return [
      * You should set this value in your `.env` file as `COINPAY_REDIRECT_URL`.
      *
      * Example: 'https://your-app.com/payment/callback'
-     *
-     * @var string
      */
     'redirect_url' => env('COINPAY_REDIRECT_URL', 'https://your-app.com/payment/callback'),
 
