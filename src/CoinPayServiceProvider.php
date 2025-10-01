@@ -25,17 +25,17 @@ class CoinPayServiceProvider extends ServiceProvider
         });
 
         $this->mergeConfigFrom(
-            __DIR__.'/config/coinpay.php', 'coinpay'
+            __DIR__.'/../config/coinpay.php', 'coinpay'
         );
 
     }
 
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/routes/webhook.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/webhook.php');
 
         $this->publishes([
-            __DIR__.'/config/coinpay.php' => config_path('coinpay.php'),
+            __DIR__.'/../config/coinpay.php' => config_path('coinpay.php'),
         ], 'coinpay-config');
     }
 }

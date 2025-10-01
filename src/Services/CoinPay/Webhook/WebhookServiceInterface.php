@@ -11,7 +11,6 @@ interface WebhookServiceInterface
      * processes it (e.g., logging, saving to database, or dispatching an event),
      * and returns a standard response.
      *
-     * @param string $gateway The payment gateway identifier (e.g., 'paypal', 'stripe').
      * @param array $payload The webhook payload data sent by the gateway.
      *
      * @return array{
@@ -19,5 +18,5 @@ interface WebhookServiceInterface
      *     message: string
      * }
      */
-    public function handleWebhook(string $gateway, array $payload): array;
+    public function handleWebhook(array $payload): array;
 }
