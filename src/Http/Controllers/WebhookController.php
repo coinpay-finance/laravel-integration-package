@@ -29,6 +29,8 @@ class WebhookController
      */
     public function handle(WebhookRequest $request): JsonResponse
     {
+        $secret = $request->header('SECRET');
+
         // Extract relevant data from the request
         $validate = $request->only(['status', 'reason', 'transaction_id', 'amount', 'transaction_hash']);
 
@@ -48,6 +50,7 @@ class WebhookController
         return Response::json([
             'is_success' => true,
             'message' => 'successfully',
+            'secret' => $secret,
             'transaction_hash' => $validate['transaction_hash']
         ]);
     }
