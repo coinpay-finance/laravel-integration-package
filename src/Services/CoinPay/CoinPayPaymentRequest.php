@@ -30,7 +30,7 @@ class CoinPayPaymentRequest
         public ?string  $redirectUrl = null,
         public ?string $webhookCallback = null,
     ) {
-        $this->webhookCallback = $this->webhookCallback ?? route('coinpay.webhook');
+        $this->webhookCallback = $this->webhookCallback ?? route(config('coinpay.webhook_route_name', 'coinpay.webhook'));
         $this->redirectUrl = $redirectUrl ?? config('coinpay.redirect_url');
     }
 

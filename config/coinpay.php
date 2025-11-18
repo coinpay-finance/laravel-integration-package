@@ -44,6 +44,18 @@ return [
      */
     'webhook_route' => env('COINPAY_WEBHOOK_ROUTE', '/coinpay/webhook'),
 
+
+    /**
+     * Webhook Route name.
+     *
+     * This is the URI path where CoinPay will send asynchronous payment
+     * notifications (webhooks). You can customize it in your `.env` file
+     * as `COINPAY_WEBHOOK_ROUTE_NAME`.
+     *
+     * Example: '/coinpay/webhook'
+     */
+    'webhook_route_name' => env('COINPAY_WEBHOOK_ROUTE_NAME', 'coinpay.webhook'),
+
     /**
      * Webhook Service.
      *
