@@ -17,13 +17,20 @@ class WebhookRequest extends FormRequest
         ];
     }
 
+    /**
+     * Authentication for this request is handled by the
+     * VerifyCoinPayWebhookSignature route middleware, which runs before
+     * this FormRequest is resolved and has access to the raw request body
+     * needed for HMAC signature verification (validation would otherwise
+     * force JSON decoding first, and decode/re-encode can change the
+     * bytes the signature was computed over). By the time this method
+     * runs, the request has already been verified, so it's safe to
+     * always authorize here.
+     *
+     * @see \Coinpay\Finance\Http\Middleware\VerifyCoinPayWebhookSignature
+     */
     public function authorize(): bool
     {
-        $secret = $this->header('SECRET');
-        if ($secret !== config('coinpay.webhook_secret')) {
-            return false;
-        }
-
         return true;
     }
 }

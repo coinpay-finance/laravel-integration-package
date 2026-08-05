@@ -5,23 +5,20 @@ namespace Coinpay\Finance\Services\CoinPay\Webhook;
 class WebhookService implements WebhookServiceInterface
 {
     /**
-     * Handle a payment gateway webhook.
+     * Default WebhookServiceInterface implementation.
      *
-     * This method receives the webhook payload from the specified gateway,
-     * processes it (e.g., logging, saving to database, or dispatching an event),
-     * and returns a standard response.
+     * Signature authenticity is already guaranteed by the time this runs
+     * (see VerifyCoinPayWebhookSignature). This base implementation is
+     * intentionally a no-op pass-through — it doesn't know how a given
+     * application wants to persist/react to a payment update, so it just
+     * acknowledges the payload. Applications that need to actually store
+     * the transaction, dispatch events, etc. should bind their own
+     * implementation via the `coinpay.webhook_service` config value.
      *
-     * @param array $payload The webhook payload data sent by the gateway.
-     *
-     * @return array{
-     *     is_success: bool,
-     *     message: string
-     * }
+     * @inheritDoc
      */
     public function handleWebhook(array $payload): array
     {
-
-        // Currently, just return a success response
         return [
             'is_success' => true,
             'message' => 'Webhook handled successfully',

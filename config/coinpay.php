@@ -32,6 +32,23 @@ return [
      */
     'base_url' => env('COINPAY_BASE_URL', 'https://platform.coinpay.finance/api/v1/coin-pay'),
 
+    /**
+     * HTTP connect timeout (seconds).
+     *
+     * How long to wait while establishing the TCP connection to the
+     * CoinPay API before giving up. Override with `COINPAY_CONNECT_TIMEOUT`.
+     */
+    'connect_timeout' => (float) env('COINPAY_CONNECT_TIMEOUT', 5),
+
+    /**
+     * HTTP request timeout (seconds).
+     *
+     * How long to wait for a full response from the CoinPay API before
+     * giving up. Without this, a hung upstream request could hang the
+     * merchant's own request indefinitely. Override with `COINPAY_TIMEOUT`.
+     */
+    'timeout' => (float) env('COINPAY_TIMEOUT', 15),
+
 
     /**
      * Webhook Route.
@@ -75,9 +92,25 @@ return [
      *
      * A secret key used to verify the authenticity of incoming webhook requests.
      * You should set this value in your `.env` file as `COINPAY_WEBHOOK_SECRET`.
-     * CoinPay will include this secret in the request headers for verification.
+     *
+     * This single secret is used for BOTH supported verification schemes:
+     *  - Current (HMAC-SHA256): used to recompute the `X-Coinpay-Signature`
+     *    digest over the raw request body.
+     *  - Legacy (static header, deprecated): compared directly against the
+     *    `SECRET` request header. Kept as a fallback for merchants who
+     *    haven't moved to signature verification yet.
      */
     'webhook_secret' => env('COINPAY_WEBHOOK_SECRET', ''),
+
+    /**
+     * Webhook Signature Tolerance (seconds).
+     *
+     * Maximum allowed clock skew between the `X-Coinpay-Timestamp` header
+     * and the server's current time before an incoming HMAC-signed webhook
+     * is rejected as stale/replayed. Override with
+     * `COINPAY_WEBHOOK_SIGNATURE_TOLERANCE`.
+     */
+    'webhook_signature_tolerance' => (int) env('COINPAY_WEBHOOK_SIGNATURE_TOLERANCE', 300),
 
     /**
      * Redirect URL.
